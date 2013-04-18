@@ -35,7 +35,6 @@ public class effectBleeding extends Effect {
 				Player p = (Player) (event.getEntity());
 				if (event.getDamager() instanceof Zombie) {
 					if (isPercent() && !isEffect(p)) {
-						p.sendMessage("Bleeding");
 						addEffect(p, run(p));
 					}
 				}
