@@ -18,7 +18,7 @@ public class effectBleeding extends Effect {
 
 	public effectBleeding(DarkDays plugin) {
 		super(plugin, "Bleeding");
-		setPercent(30);
+		setPercent(10);
 		setDelay(200);
 		setTime(30);
 		Bukkit.getServer().getPluginManager().registerEvents(new EffectListener(this), plugin);

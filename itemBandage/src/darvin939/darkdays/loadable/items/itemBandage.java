@@ -33,7 +33,7 @@ public class itemBandage extends Item {
 		}
 
 		@EventHandler(priority = EventPriority.NORMAL)
-		public void milk(PlayerInteractEntityEvent event) {
+		public void onPlayerInteractEntity(PlayerInteractEntityEvent event) {
 			if ((boolean) Config.getPC().getData(event.getPlayer(), PC.SPAWNED)) {
 				Integer bandage_id = Nodes.bandage_id.getInteger();
 				Integer bandage_health = Nodes.bandage_health.getInteger();
@@ -58,11 +58,11 @@ public class itemBandage extends Item {
 									TagAPI.refreshPlayer(p);
 								}
 								DarkDays.getEffectManager().cancelEffect(e, getDepend());
-								e.sendMessage("You were bandaged by " + p.getName());
-								p.sendMessage("You bandaged " + e.getName());
+								Config.FGU.PrintPxMsg(e, "You were bandaged by " + p.getName());
+								Config.FGU.PrintPxMsg(p, "You bandaged " + e.getName());
 							}
 						} else
-							p.sendMessage(e.getName() + " is healthy");
+							Config.FGU.PrintPxMsg(p, e.getName() + " is healthy");
 					}
 				}
 			}
