@@ -17,6 +17,7 @@ import darvin939.DarkDays.Configuration.PC;
 import darvin939.DarkDays.Loadable.EffectManager;
 import darvin939.DarkDays.Loadable.Item;
 import darvin939.DarkDays.Players.Memory.PlayerInfo;
+import darvin939.DarkDays.Utils.Util;
 
 public class itemBandage extends Item {
 
@@ -58,11 +59,11 @@ public class itemBandage extends Item {
 									TagAPI.refreshPlayer(p);
 								}
 								DarkDays.getEffectManager().cancelEffect(e, getDepend());
-								Config.FGU.PrintPxMsg(e, "You were bandaged by " + p.getName());
-								Config.FGU.PrintPxMsg(p, "You bandaged " + e.getName());
+								Util.PrintPxMSG(e, "You were bandaged by " + p.getName());
+								Util.PrintPxMSG(p, "You bandaged " + e.getName());
 							}
 						} else
-							Config.FGU.PrintPxMsg(p, e.getName() + " is healthy");
+							Util.PrintPxMSG(p, e.getName() + " is healthy");
 					}
 				}
 			}

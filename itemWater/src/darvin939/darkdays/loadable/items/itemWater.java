@@ -13,9 +13,9 @@ import org.bukkit.potion.PotionType;
 
 import darvin939.DarkDays.DarkDays;
 import darvin939.DarkDays.Tasks;
-import darvin939.DarkDays.Configuration.Config;
 import darvin939.DarkDays.Loadable.Item;
 import darvin939.DarkDays.Players.Memory.PlayerInfo;
+import darvin939.DarkDays.Utils.Util;
 
 public class itemWater extends Item {
 
@@ -51,8 +51,8 @@ public class itemWater extends Item {
 		plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
 			public void run() {
 				if (p.getInventory().getItem(hs).getType() == Material.GLASS_BOTTLE) {
-					Tasks.player_hunger.put(p, Integer.valueOf(209999));
-					Config.FGU.PrintPxMsg(p, Config.FGU.MSG(getMessage()));
+					Tasks.player_hunger.put(p, Integer.valueOf(309999));
+					Util.PrintPxMSG(p, getMessage());
 				}
 			}
 		}, 35);
