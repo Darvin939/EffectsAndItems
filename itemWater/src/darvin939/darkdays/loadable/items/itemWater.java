@@ -21,8 +21,8 @@ public class itemWater extends Item {
 
 	public itemWater(DarkDays plugin) {
 
-		super(plugin, "wBottle");
-		setMessage("item_drink_water");
+		super(plugin, "WaterBottle");
+		setMessage("item_drink_water", "You drink some water");
 
 		Bukkit.getServer().getPluginManager().registerEvents(new ItemListener(this), plugin);
 	}

@@ -1,6 +1,10 @@
 package darvin939.darkdays.loadable.effects;
 
+import java.io.File;
+import java.io.IOException;
+
 import org.bukkit.Bukkit;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Zombie;
 import org.bukkit.event.EventHandler;
@@ -15,6 +19,8 @@ import darvin939.DarkDays.Loadable.Effect;
 import darvin939.DarkDays.Loadable.EffectManager;
 
 public class effectBleeding extends Effect {
+	private FileConfiguration cfgSpawn;
+	private File cfgSpawnFile;
 
 	public effectBleeding(DarkDays plugin) {
 		super(plugin, "Bleeding");
@@ -22,6 +28,15 @@ public class effectBleeding extends Effect {
 		setDelay(200);
 		setTime(30);
 		Bukkit.getServer().getPluginManager().registerEvents(new EffectListener(this), plugin);
+		createConfig(plugin, getClass());
+	}
+	
+	public void saveConfig() {
+		try {
+			cfgSpawn.save(cfgSpawnFile);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public class EffectListener implements Listener {
@@ -47,7 +62,10 @@ public class effectBleeding extends Effect {
 			public void run() {
 				if (EffectManager.isEffect(p, name) != null) {
 					p.addPotionEffect(new PotionEffect(PotionEffectType.getByName("wither"), getTime(), 1));
-					p.setHealth(p.getHealth() - 2);
+					if (p.getHealth() >= 2)
+						p.setHealth(p.getHealth() - 2);
+					else
+						p.setHealth(0);
 				}
 
 			}
