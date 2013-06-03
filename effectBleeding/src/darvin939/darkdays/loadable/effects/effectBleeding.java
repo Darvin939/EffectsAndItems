@@ -1,8 +1,5 @@
 package darvin939.darkdays.loadable.effects;
 
-import java.io.File;
-import java.io.IOException;
-
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
@@ -16,27 +13,34 @@ import org.bukkit.potion.PotionEffectType;
 
 import darvin939.DarkDays.DarkDays;
 import darvin939.DarkDays.Loadable.Effect;
-import darvin939.DarkDays.Loadable.EffectManager;
+import darvin939.DarkDays.Loadable.LiteConfig;
 
 public class effectBleeding extends Effect {
-	private FileConfiguration cfgSpawn;
-	private File cfgSpawnFile;
+
+	private LiteConfig cfg;
+	private int damage;
+	private FileConfiguration section;
 
 	public effectBleeding(DarkDays plugin) {
 		super(plugin, "Bleeding");
-		setPercent(10);
-		setDelay(200);
-		setTime(30);
+		cfg = new LiteConfig(plugin, getClass());
+		section = cfg.get();
+
+		setPercent(section.getInt("Percent", 10));
+		setDelay(section.getInt("Delay", 200));
+		setTime(section.getInt("Time", 30));
+		damage = section.getInt("Damage", 2);
+
 		Bukkit.getServer().getPluginManager().registerEvents(new EffectListener(this), plugin);
-		createConfig(plugin, getClass());
+		saveConfig();
 	}
-	
+
 	public void saveConfig() {
-		try {
-			cfgSpawn.save(cfgSpawnFile);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		section.set("Percent", getPercent());
+		section.set("Delay", getDelay());
+		section.set("Time", getTime());
+		section.set("Damage", damage);
+		cfg.save();
 	}
 
 	public class EffectListener implements Listener {
@@ -60,10 +64,10 @@ public class effectBleeding extends Effect {
 	public Integer run(final Player p) {
 		return plugin.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable() {
 			public void run() {
-				if (EffectManager.isEffect(p, name) != null) {
+				if (DarkDays.getEffectManager().isEffect(p, name)) {
 					p.addPotionEffect(new PotionEffect(PotionEffectType.getByName("wither"), getTime(), 1));
-					if (p.getHealth() >= 2)
-						p.setHealth(p.getHealth() - 2);
+					if (p.getHealth() >= damage)
+						p.setHealth(p.getHealth() - damage);
 					else
 						p.setHealth(0);
 				}
