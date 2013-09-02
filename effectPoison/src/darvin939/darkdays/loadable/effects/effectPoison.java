@@ -15,23 +15,21 @@ import darvin939.DarkDays.DarkDays;
 import darvin939.DarkDays.Loadable.Effect;
 import darvin939.DarkDays.Loadable.LiteConfig;
 
-public class effectBleeding extends Effect {
+public class effectPoison extends Effect {
 
 	private LiteConfig cfg;
-	private int damage;
 	private FileConfiguration section;
 	private int amplifier;
 
-	public effectBleeding(DarkDays plugin) {
-		super(plugin, "Bleeding");
+	public effectPoison(DarkDays plugin) {
+		super(plugin, "Poison");
 		cfg = new LiteConfig(plugin, getClass());
 		section = cfg.get();
 
-		setPercent(section.getInt("Percent", 10));
-		setDelay(section.getInt("Delay", 200));
-		setTime(section.getInt("Time", 30));
-		damage = section.getInt("Damage", 2);
-		amplifier = section.getInt("Amplifier", 1);
+		setPercent(section.getInt("Percent", 50));
+		setDelay(section.getInt("Delay", 1000));
+		setTime(section.getInt("Time", 600));
+		amplifier = section.getInt("Amplifier", 0);
 
 		Bukkit.getServer().getPluginManager().registerEvents(new EffectListener(this), plugin);
 		saveConfig();
@@ -41,7 +39,6 @@ public class effectBleeding extends Effect {
 		section.set("Percent", getPercent());
 		section.set("Delay", getDelay());
 		section.set("Time", getTime());
-		section.set("Damage", damage);
 		section.set("Amplifier", amplifier);
 		cfg.save();
 	}
@@ -57,7 +54,7 @@ public class effectBleeding extends Effect {
 				Player p = (Player) (event.getEntity());
 				if (event.getDamager() instanceof Zombie) {
 					if (isPercent() && !isEffect(p)) {
-						p.sendMessage("Bleeding");
+						p.sendMessage("Poison");
 						addEffect(p, run(p));
 					}
 				}
@@ -69,14 +66,10 @@ public class effectBleeding extends Effect {
 		return plugin.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable() {
 			public void run() {
 				if (DarkDays.getEffectManager().isEffect(p, name)) {
-					p.addPotionEffect(new PotionEffect(PotionEffectType.getByName("wither"), getTime(), amplifier));
-					if (p.getHealth() >= damage)
-						p.setHealth(p.getHealth() - damage);
-					else
-						p.setHealth(0);
+					p.addPotionEffect(new PotionEffect(PotionEffectType.getByName("poison"), getTime(), amplifier));
 				}
 
 			}
-		}, 150, getDelay());
+		}, 200, getDelay());
 	}
 }
