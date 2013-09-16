@@ -24,7 +24,6 @@ import darvin939.DarkDays.Utils.Util;
 public class itemBandage extends Item {
 	private LiteConfig cfg;
 	private FileConfiguration section;
-	private int bandage_id;
 	private int bandage_health;
 
 	public itemBandage(DarkDays plugin) {
@@ -33,8 +32,8 @@ public class itemBandage extends Item {
 		section = cfg.get();
 
 		setDepend(section.getString("Depend", "Bleeding"));
-		bandage_id = section.getInt("Bandage_id", 339);
-		bandage_health = section.getInt("Bandage_health", 8);
+		setItem(section.getInt("Id", 339));
+		bandage_health = section.getInt("Restore_health", 8);
 
 		Bukkit.getServer().getPluginManager().registerEvents(new ItemListener(this), plugin);
 		saveConfig();
@@ -42,8 +41,8 @@ public class itemBandage extends Item {
 
 	public void saveConfig() {
 		section.set("Depend", getDepend());
-		section.set("Bandage_id", bandage_id);
-		section.set("Bandage_health", bandage_health);
+		section.set("Id", getItem());
+		section.set("Restore_health", bandage_health);
 		cfg.save();
 	}
 
@@ -55,7 +54,7 @@ public class itemBandage extends Item {
 		@EventHandler(priority = EventPriority.NORMAL)
 		public void onPlayerInteractEntity(PlayerInteractEntityEvent event) {
 			if ((boolean) Config.getPC().getData(event.getPlayer(), PlayerConfig.SPAWNED)) {
-				if (((event.getRightClicked() instanceof Player)) && (event.getPlayer().getItemInHand().getTypeId() == bandage_id)) {
+				if (((event.getRightClicked() instanceof Player)) && (event.getPlayer().getItemInHand().getTypeId() == getItem())) {
 					Player e = (Player) event.getRightClicked();
 					Player p = event.getPlayer();
 					if (!DarkDays.getEffectManager().isEffect(getDepend())) {
@@ -71,7 +70,7 @@ public class itemBandage extends Item {
 									e.setHealth(20);
 								}
 								if (p.getItemInHand().getAmount() > 1)
-									p.setItemInHand(new ItemStack(Material.getMaterial(bandage_id), p.getItemInHand().getAmount() - 1));
+									p.setItemInHand(new ItemStack(Material.getMaterial(getItem()), p.getItemInHand().getAmount() - 1));
 								else {
 									p.setItemInHand(new ItemStack(Material.AIR, 0));
 								}
@@ -94,7 +93,7 @@ public class itemBandage extends Item {
 		public void onPlayerInteract(PlayerInteractEvent event) {
 			Player p = event.getPlayer();
 			if (PlayerInfo.isPlaying(p)) {
-				if (event.getPlayer().getItemInHand().getTypeId() == bandage_id) {
+				if (event.getPlayer().getItemInHand().getTypeId() == getItem()) {
 					if (!DarkDays.getEffectManager().isEffect(getDepend())) {
 						Util.PrintPx(p, "Effect &2" + getDepend() + " &fnot found on the server!");
 						return;
@@ -107,7 +106,7 @@ public class itemBandage extends Item {
 								p.setHealth(20);
 							}
 							if (p.getItemInHand().getAmount() > 1)
-								p.setItemInHand(new ItemStack(Material.getMaterial(bandage_id), p.getItemInHand().getAmount() - 1));
+								p.setItemInHand(new ItemStack(Material.getMaterial(getItem()), p.getItemInHand().getAmount() - 1));
 							else {
 								p.setItemInHand(new ItemStack(Material.AIR, 0));
 							}

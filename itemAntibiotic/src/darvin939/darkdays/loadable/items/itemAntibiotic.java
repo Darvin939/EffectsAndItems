@@ -22,7 +22,6 @@ import darvin939.DarkDays.Utils.Util;
 public class itemAntibiotic extends Item {
 	private LiteConfig cfg;
 	private FileConfiguration section;
-	private int antibiotic_id;
 
 	public itemAntibiotic(DarkDays plugin) {
 		super(plugin, "Antibiotic");
@@ -30,7 +29,7 @@ public class itemAntibiotic extends Item {
 		section = cfg.get();
 
 		setDepend(section.getString("Depend", "Poison"));
-		antibiotic_id = section.getInt("Antibiotic_id", 370);
+		setItem(section.getInt("Id", 370));
 
 		Bukkit.getServer().getPluginManager().registerEvents(new ItemListener(this), plugin);
 		saveConfig();
@@ -38,7 +37,7 @@ public class itemAntibiotic extends Item {
 
 	public void saveConfig() {
 		section.set("Depend", getDepend());
-		section.set("Antibiotic_id", antibiotic_id);
+		section.set("Id", getItem());
 		cfg.save();
 	}
 
@@ -50,7 +49,7 @@ public class itemAntibiotic extends Item {
 		@EventHandler(priority = EventPriority.NORMAL)
 		public void onPlayerInteractEntity(PlayerInteractEntityEvent event) {
 			if ((boolean) Config.getPC().getData(event.getPlayer(), PlayerConfig.SPAWNED)) {
-				if (((event.getRightClicked() instanceof Player)) && (event.getPlayer().getItemInHand().getTypeId() == antibiotic_id)) {
+				if (((event.getRightClicked() instanceof Player)) && (event.getPlayer().getItemInHand().getTypeId() == getItem())) {
 					Player e = (Player) event.getRightClicked();
 					Player p = event.getPlayer();
 					if (!DarkDays.getEffectManager().isEffect(getDepend())) {
@@ -60,7 +59,7 @@ public class itemAntibiotic extends Item {
 					if (PlayerInfo.isPlaying(p) && PlayerInfo.isPlaying(e)) {
 						if (DarkDays.getEffectManager().isEffect(e, getDepend())) {
 							if (p.getItemInHand().getAmount() > 1)
-								p.setItemInHand(new ItemStack(Material.getMaterial(antibiotic_id), p.getItemInHand().getAmount() - 1));
+								p.setItemInHand(new ItemStack(Material.getMaterial(getItem()), p.getItemInHand().getAmount() - 1));
 							else {
 								p.setItemInHand(new ItemStack(Material.AIR, 0));
 							}
@@ -78,14 +77,14 @@ public class itemAntibiotic extends Item {
 		public void onPlayerInteract(PlayerInteractEvent event) {
 			Player p = event.getPlayer();
 			if (PlayerInfo.isPlaying(p)) {
-				if (event.getPlayer().getItemInHand().getTypeId() == antibiotic_id) {
+				if (event.getPlayer().getItemInHand().getTypeId() == getItem()) {
 					if (!DarkDays.getEffectManager().isEffect(getDepend())) {
 						Util.PrintPx(p, "Effect &2" + getDepend() + " &fnot found on the server!");
 						return;
 					}
 					if (DarkDays.getEffectManager().isEffect(p, getDepend())) {
 						if (p.getItemInHand().getAmount() > 1)
-							p.setItemInHand(new ItemStack(Material.getMaterial(antibiotic_id), p.getItemInHand().getAmount() - 1));
+							p.setItemInHand(new ItemStack(Material.getMaterial(getItem()), p.getItemInHand().getAmount() - 1));
 						else {
 							p.setItemInHand(new ItemStack(Material.AIR, 0));
 						}
