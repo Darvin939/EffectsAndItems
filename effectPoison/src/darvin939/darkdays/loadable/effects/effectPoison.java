@@ -30,6 +30,8 @@ public class effectPoison extends Effect {
 		setDelay(section.getInt("Delay", 1000));
 		setTime(section.getInt("Time", 600));
 		amplifier = section.getInt("Amplifier", 0);
+		
+		setMessage("effect_use_poison", section.getString("Message", "Poison"));
 
 		Bukkit.getServer().getPluginManager().registerEvents(new EffectListener(this), plugin);
 		saveConfig();
@@ -40,6 +42,7 @@ public class effectPoison extends Effect {
 		section.set("Delay", getDelay());
 		section.set("Time", getTime());
 		section.set("Amplifier", amplifier);
+		section.set("Message", section.getString("Message", "Poison"));
 		cfg.save();
 	}
 
@@ -54,7 +57,7 @@ public class effectPoison extends Effect {
 				Player p = (Player) (event.getEntity());
 				if (event.getDamager() instanceof Zombie) {
 					if (isPercent() && !isEffect(p)) {
-						p.sendMessage("Poison");
+						sendMessage(p);
 						addEffect(p, run(p));
 					}
 				}

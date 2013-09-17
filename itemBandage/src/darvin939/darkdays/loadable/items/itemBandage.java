@@ -25,6 +25,10 @@ public class itemBandage extends Item {
 	private LiteConfig cfg;
 	private FileConfiguration section;
 	private int bandage_health;
+	private String mess3;
+	private String mess2;
+	private String mess1;
+	private String mess4;
 
 	public itemBandage(DarkDays plugin) {
 		super(plugin, "Bandage");
@@ -34,6 +38,14 @@ public class itemBandage extends Item {
 		setDepend(section.getString("Depend", "Bleeding"));
 		setItem(section.getInt("Id", 339));
 		bandage_health = section.getInt("Restore_health", 8);
+		
+		// setMessage("item_use_water", "You drink some water");
+
+		mess1 = section.getString("Message_1", "You were bandaged by &2");
+		mess2 = section.getString("Message_2", "You bandaged &2");
+		mess3 = section.getString("Message_3", "You bandaged yourself");
+		mess4 = section.getString("Message_4", " is healthy");
+		
 
 		Bukkit.getServer().getPluginManager().registerEvents(new ItemListener(this), plugin);
 		saveConfig();
@@ -58,7 +70,7 @@ public class itemBandage extends Item {
 					Player e = (Player) event.getRightClicked();
 					Player p = event.getPlayer();
 					if (!DarkDays.getEffectManager().isEffect(getDepend())) {
-						Util.PrintPx(p, "Effect &2" + getDepend() + " &fnot found on the server!");
+						Util.PrintMSG(p, "cmd_effectnf", getDepend());
 						return;
 					}
 					if (PlayerInfo.isPlaying(p) && PlayerInfo.isPlaying(e)) {
@@ -79,11 +91,11 @@ public class itemBandage extends Item {
 									TagAPIListener.refreshPlayer(p);
 								}
 								DarkDays.getEffectManager().cancelEffect(e, getDepend());
-								Util.Print(e, "You were bandaged by &2" + p.getName());
-								Util.Print(p, "You bandaged &2" + e.getName());
+								Util.Print(e, mess1 + p.getName());
+								Util.Print(p, mess2 + e.getName());
 							}
 						} else
-							Util.Print(p, e.getName() + " is healthy");
+							Util.Print(p, e.getName() + mess4);
 					}
 				}
 			}
@@ -95,7 +107,7 @@ public class itemBandage extends Item {
 			if (PlayerInfo.isPlaying(p)) {
 				if (event.getPlayer().getItemInHand().getTypeId() == getItem()) {
 					if (!DarkDays.getEffectManager().isEffect(getDepend())) {
-						Util.PrintPx(p, "Effect &2" + getDepend() + " &fnot found on the server!");
+						Util.PrintMSG(p, "cmd_effectnf", getDepend());
 						return;
 					}
 					if (DarkDays.getEffectManager().isEffect(p, getDepend())) {
@@ -111,7 +123,7 @@ public class itemBandage extends Item {
 								p.setItemInHand(new ItemStack(Material.AIR, 0));
 							}
 							DarkDays.getEffectManager().cancelEffect(p, getDepend());
-							Util.Print(p, "You bandaged yourself");
+							Util.Print(p, mess3);
 						}
 					}
 				}

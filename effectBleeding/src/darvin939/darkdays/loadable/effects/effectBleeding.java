@@ -32,6 +32,8 @@ public class effectBleeding extends Effect {
 		setTime(section.getInt("Time", 30));
 		damage = section.getInt("Damage", 2);
 		amplifier = section.getInt("Amplifier", 1);
+		
+		setMessage("effect_use_bleeding", section.getString("Message", "Bleeding"));
 
 		Bukkit.getServer().getPluginManager().registerEvents(new EffectListener(this), plugin);
 		saveConfig();
@@ -43,6 +45,7 @@ public class effectBleeding extends Effect {
 		section.set("Time", getTime());
 		section.set("Damage", damage);
 		section.set("Amplifier", amplifier);
+		section.set("Message", section.getString("Message", "Bleeding"));
 		cfg.save();
 	}
 
@@ -57,7 +60,7 @@ public class effectBleeding extends Effect {
 				Player p = (Player) (event.getEntity());
 				if (event.getDamager() instanceof Zombie) {
 					if (isPercent() && !isEffect(p)) {
-						p.sendMessage("Bleeding");
+						sendMessage(p);
 						addEffect(p, run(p));
 					}
 				}

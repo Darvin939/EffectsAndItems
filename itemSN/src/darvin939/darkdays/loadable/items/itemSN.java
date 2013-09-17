@@ -14,7 +14,6 @@ import darvin939.DarkDays.DarkDays;
 import darvin939.DarkDays.Loadable.Item;
 import darvin939.DarkDays.Loadable.LiteConfig;
 import darvin939.DarkDays.Players.Memory.PlayerInfo;
-import darvin939.DarkDays.Utils.Util;
 
 public class itemSN extends Item {
 
@@ -27,10 +26,12 @@ public class itemSN extends Item {
 	public itemSN(DarkDays plugin) {
 
 		super(plugin, "Syntetic Narcotic");
-		setMessage("item_use_sn", "You have used synthetic drug");
+		 // setMessage("item_use_sn", "You have used synthetic drug");
 
 		cfg = new LiteConfig(plugin, getClass());
 		section = cfg.get();
+		
+		setMessage("item_use_sn", section.getString("Message","You have used synthetic drug"));
 
 		setItem(section.getInt("Id", 352));
 		delay1 = section.getInt("SpeedDelay", 400);
@@ -44,6 +45,7 @@ public class itemSN extends Item {
 		section.set("Id", getItem());
 		section.set("SpeedDelay", 400);
 		section.set("BlindnessDelay", 200);
+		section.set("Message", section.getString("Message", "You have used synthetic drug"));
 		cfg.save();
 	}
 
@@ -59,9 +61,7 @@ public class itemSN extends Item {
 				if (p.getItemInHand().getTypeId() == getItem()) {
 					if (p.hasPotionEffect(PotionEffectType.getByName("speed")))
 						return;
-					Util.PrintPxMSG(p, getMessage());
-					final int delay1 = 400;
-					final int delay2 = 200;
+					sendMessage(p);
 					minusOne(p);
 					p.addPotionEffect(new PotionEffect(PotionEffectType.getByName("speed"), delay1, 1));
 					Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
