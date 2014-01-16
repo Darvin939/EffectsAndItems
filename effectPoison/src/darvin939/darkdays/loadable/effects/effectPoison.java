@@ -30,7 +30,7 @@ public class effectPoison extends Effect {
 		setDelay(section.getInt("Delay", 1000));
 		setTime(section.getInt("Time", 600));
 		amplifier = section.getInt("Amplifier", 0);
-		
+
 		setMessage("effect_use_poison", section.getString("Message", "Poison"));
 
 		Bukkit.getServer().getPluginManager().registerEvents(new EffectListener(this), plugin);
@@ -69,7 +69,7 @@ public class effectPoison extends Effect {
 		return plugin.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable() {
 			public void run() {
 				if (DarkDays.getEffectManager().isEffect(p, name)) {
-					p.addPotionEffect(new PotionEffect(PotionEffectType.getByName("poison"), getTime(), amplifier));
+					p.addPotionEffect(new PotionEffect(PotionEffectType.POISON, getTime(), amplifier));
 				}
 
 			}

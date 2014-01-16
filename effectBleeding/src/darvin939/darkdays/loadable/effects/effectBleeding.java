@@ -72,7 +72,7 @@ public class effectBleeding extends Effect {
 		return plugin.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable() {
 			public void run() {
 				if (DarkDays.getEffectManager().isEffect(p, name)) {
-					p.addPotionEffect(new PotionEffect(PotionEffectType.getByName("wither"), getTime(), amplifier));
+					p.addPotionEffect(new PotionEffect(PotionEffectType.WITHER, getTime(), amplifier));
 					if (p.getHealth() >= damage)
 						p.setHealth(p.getHealth() - damage);
 					else

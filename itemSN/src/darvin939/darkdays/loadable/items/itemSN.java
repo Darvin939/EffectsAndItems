@@ -14,6 +14,7 @@ import darvin939.DarkDays.DarkDays;
 import darvin939.DarkDays.Loadable.Item;
 import darvin939.DarkDays.Loadable.LiteConfig;
 import darvin939.DarkDays.Players.Memory.PlayerInfo;
+import darvin939.DeprecAPI.ItemAPI;
 
 public class itemSN extends Item {
 
@@ -58,7 +59,7 @@ public class itemSN extends Item {
 		public void onPlayerInteract(PlayerInteractEvent event) {
 			final Player p = event.getPlayer();
 			if (PlayerInfo.isPlaying(p)) {
-				if (p.getItemInHand().getTypeId() == getItem()) {
+				if (ItemAPI.get(p.getItemInHand().getType()).id() == getItem()) {
 					if (p.hasPotionEffect(PotionEffectType.getByName("speed")))
 						return;
 					sendMessage(p);

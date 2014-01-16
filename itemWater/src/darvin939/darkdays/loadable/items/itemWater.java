@@ -65,7 +65,7 @@ public class itemWater extends Item {
 		plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
 			public void run() {
 				if (p.getInventory().getItem(hs).getType() == Material.GLASS_BOTTLE) {
-					Tasks.player_hunger.put(p, Integer.valueOf(309999));
+					Tasks.player_thirst.put(p, Integer.valueOf(309999));
 					sendMessage(p);
 				}
 			}

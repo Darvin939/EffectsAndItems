@@ -20,6 +20,7 @@ import darvin939.DarkDays.Loadable.Item;
 import darvin939.DarkDays.Loadable.LiteConfig;
 import darvin939.DarkDays.Players.Memory.PlayerInfo;
 import darvin939.DarkDays.Utils.Util;
+import darvin939.DeprecAPI.ItemAPI;
 
 public class itemBandage extends Item {
 	private LiteConfig cfg;
@@ -66,7 +67,7 @@ public class itemBandage extends Item {
 		@EventHandler(priority = EventPriority.NORMAL)
 		public void onPlayerInteractEntity(PlayerInteractEntityEvent event) {
 			if ((boolean) Config.getPC().getData(event.getPlayer(), PlayerConfig.SPAWNED)) {
-				if (((event.getRightClicked() instanceof Player)) && (event.getPlayer().getItemInHand().getTypeId() == getItem())) {
+				if (((event.getRightClicked() instanceof Player)) && (ItemAPI.get(event.getPlayer().getItemInHand().getType()).id() == getItem())) {
 					Player e = (Player) event.getRightClicked();
 					Player p = event.getPlayer();
 					if (!DarkDays.getEffectManager().isEffect(getDepend())) {
@@ -82,7 +83,7 @@ public class itemBandage extends Item {
 									e.setHealth(20);
 								}
 								if (p.getItemInHand().getAmount() > 1)
-									p.setItemInHand(new ItemStack(Material.getMaterial(getItem()), p.getItemInHand().getAmount() - 1));
+									p.setItemInHand(new ItemStack(ItemAPI.get(getItem()).type(), p.getItemInHand().getAmount() - 1));
 								else {
 									p.setItemInHand(new ItemStack(Material.AIR, 0));
 								}
@@ -105,7 +106,7 @@ public class itemBandage extends Item {
 		public void onPlayerInteract(PlayerInteractEvent event) {
 			Player p = event.getPlayer();
 			if (PlayerInfo.isPlaying(p)) {
-				if (event.getPlayer().getItemInHand().getTypeId() == getItem()) {
+				if (ItemAPI.get(event.getPlayer().getItemInHand().getType()).id() == getItem()) {
 					if (!DarkDays.getEffectManager().isEffect(getDepend())) {
 						Util.PrintMSG(p, "cmd_effectnf", getDepend());
 						return;
@@ -118,7 +119,7 @@ public class itemBandage extends Item {
 								p.setHealth(20);
 							}
 							if (p.getItemInHand().getAmount() > 1)
-								p.setItemInHand(new ItemStack(Material.getMaterial(getItem()), p.getItemInHand().getAmount() - 1));
+								p.setItemInHand(new ItemStack(ItemAPI.get(getItem()).type(), p.getItemInHand().getAmount() - 1));
 							else {
 								p.setItemInHand(new ItemStack(Material.AIR, 0));
 							}
