@@ -16,7 +16,7 @@ import darvin939.DarkDays.DarkDays;
 import darvin939.DarkDays.Tasks;
 import darvin939.DarkDays.Loadable.Item;
 import darvin939.DarkDays.Loadable.LiteConfig;
-import darvin939.DarkDays.Players.Memory.PlayerInfo;
+import darvin939.DarkDays.Players.Memory.PlayerData;
 
 public class itemWater extends Item {
 	
@@ -49,7 +49,7 @@ public class itemWater extends Item {
 		@EventHandler(priority = EventPriority.LOW)
 		public void wBottle(PlayerInteractEvent event) {
 			Player p = event.getPlayer();
-			if (PlayerInfo.isPlaying(p)) {
+			if (PlayerData.isPlaying(p)) {
 				Potion wBottle = new Potion(PotionType.WATER);
 				ItemStack temp = new ItemStack(wBottle.toItemStack(1));
 				ItemStack iIH = p.getItemInHand();

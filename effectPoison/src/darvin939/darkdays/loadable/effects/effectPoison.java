@@ -1,5 +1,7 @@
 package darvin939.darkdays.loadable.effects;
 
+import java.util.Arrays;
+
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
@@ -31,7 +33,8 @@ public class effectPoison extends Effect {
 		setTime(section.getInt("Time", 600));
 		amplifier = section.getInt("Amplifier", 0);
 
-		setMessage("effect_use_poison", section.getString("Message", "Poison"));
+		setMessage("effect_poison_use", section.getString("Message.Use", "Poison"));
+		setMessage("effect_poison_rnd", section.getList("Message.Random", Arrays.asList("Poison_1", "Poison_2", "Poison_3")));
 
 		Bukkit.getServer().getPluginManager().registerEvents(new EffectListener(this), plugin);
 		saveConfig();
@@ -42,7 +45,8 @@ public class effectPoison extends Effect {
 		section.set("Delay", getDelay());
 		section.set("Time", getTime());
 		section.set("Amplifier", amplifier);
-		section.set("Message", section.getString("Message", "Poison"));
+		section.set("Message.Use", section.getString("Message.Use", "Poison"));
+		section.set("Message.Random", section.getList("Message.Random", Arrays.asList("Poison_1", "Poison_2", "Poison_3")));
 		cfg.save();
 	}
 
@@ -52,13 +56,16 @@ public class effectPoison extends Effect {
 		}
 
 		@EventHandler(priority = EventPriority.NORMAL)
-		public void onPlayerInteract(EntityDamageByEntityEvent event) {
+		public void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
 			if (event.getEntity() instanceof Player) {
 				Player p = (Player) (event.getEntity());
 				if (event.getDamager() instanceof Zombie) {
-					if (isPercent() && !isEffect(p)) {
-						sendMessage(p);
-						addEffect(p, run(p));
+					if (p.getNoDamageTicks() <= 10) {
+						if (isPercent() && !isEffect(p)) {
+							sendMessage(p);
+							addEffect(p, run(p));
+							p.setNoDamageTicks(10);
+						}
 					}
 				}
 			}
@@ -69,6 +76,7 @@ public class effectPoison extends Effect {
 		return plugin.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable() {
 			public void run() {
 				if (DarkDays.getEffectManager().isEffect(p, name)) {
+					randomMessage(p);
 					p.addPotionEffect(new PotionEffect(PotionEffectType.POISON, getTime(), amplifier));
 				}
 

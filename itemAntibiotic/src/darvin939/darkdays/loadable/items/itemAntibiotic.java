@@ -16,7 +16,7 @@ import darvin939.DarkDays.Configuration.Config;
 import darvin939.DarkDays.Configuration.PlayerConfig;
 import darvin939.DarkDays.Loadable.Item;
 import darvin939.DarkDays.Loadable.LiteConfig;
-import darvin939.DarkDays.Players.Memory.PlayerInfo;
+import darvin939.DarkDays.Players.Memory.PlayerData;
 import darvin939.DarkDays.Utils.Util;
 import darvin939.DeprecAPI.ItemAPI;
 
@@ -63,10 +63,10 @@ public class itemAntibiotic extends Item {
 					Player e = (Player) event.getRightClicked();
 					Player p = event.getPlayer();
 					if (!DarkDays.getEffectManager().isEffect(getDepend())) {
-						Util.PrintMSG(p, "cmd_effectnf", getDepend());
+						Util.PrintMSGPx(p, "cmd_effectnf", getDepend());
 						return;
 					}
-					if (PlayerInfo.isPlaying(p) && PlayerInfo.isPlaying(e)) {
+					if (PlayerData.isPlaying(p) && PlayerData.isPlaying(e)) {
 						if (DarkDays.getEffectManager().isEffect(e, getDepend())) {
 							if (p.getItemInHand().getAmount() > 1)
 								p.setItemInHand(new ItemStack(ItemAPI.get(getItem()).type(), p.getItemInHand().getAmount() - 1));
@@ -86,10 +86,10 @@ public class itemAntibiotic extends Item {
 		@EventHandler(priority = EventPriority.NORMAL)
 		public void onPlayerInteract(PlayerInteractEvent event) {
 			Player p = event.getPlayer();
-			if (PlayerInfo.isPlaying(p)) {
+			if (PlayerData.isPlaying(p)) {
 				if (ItemAPI.get(event.getPlayer().getItemInHand().getType()).id() == getItem()) {
 					if (!DarkDays.getEffectManager().isEffect(getDepend())) {
-						Util.PrintMSG(p, "cmd_effectnf", getDepend());
+						Util.PrintMSGPx(p, "cmd_effectnf", getDepend());
 						return;
 					}
 					if (DarkDays.getEffectManager().isEffect(p, getDepend())) {
